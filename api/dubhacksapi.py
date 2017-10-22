@@ -67,9 +67,10 @@ def find_match():
 
 #     SELECT * FROM users JOIN surveys ON users.survey_id = surveys.id
 # WHERE users.username = 'testuser';
-    pair = random.sample(LFP, 2)
-    LFP = LFP - set(pair)
-    return (pair[0], pair[1], "in common", "controvery")
+    scores.sort()
+    pair = scores[-1]
+    LFP = LFP - set([pair[1], pair[2]])
+    return (pair[1], pair[2], pair[3], pair[4])
 
 
 def calculate_score(a, b):
@@ -81,9 +82,40 @@ def calculate_score(a, b):
     data1 = cur.fetchall()
     cur.execute(sql, [b])
     data2 = cur.fetchall()
-    for x in data1:
-        print(x)
-    return (3, a, b, "in common", "controvery")
+
+    common = []
+    contro = []
+    score = 0
+
+    for x in range(6, 12):
+        if data1[0][x] == data2[0][x]:
+            score += 1
+            common.append(data1[0][x])
+
+    for x in range(12, 16):
+        diff = abs(mapScore[data1[0][x]] - mapScore[data2[0][x]])
+        score += diff
+        if diff > 2:
+            contro.append((diff, data1[0], data2[0], x))
+
+    commonString = "You have "
+
+    for x in common:
+        commonString += x
+        commonString += ", "
+
+    commonString += " and probably much more!"
+
+    contro.sort()
+    c = contro[-1]
+
+    controString = a
+    controString += "something "
+    controString += " "
+
+    print(commonString)
+    print(controString)
+    return (score, a, b, commonString, controString)
 
 
 class LoginForm(Form):
