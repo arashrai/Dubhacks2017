@@ -1,6 +1,9 @@
-from flask import Flask, request
+from flask import Flask, render_template, request
 from flask_restful import Resource, Api
 import MySQLdb
+import socketio
+import eventlet
+import eventlet.wsgi
 
 db = MySQLdb.connect(host="localhost", user="root",
                      passwd="root", db="DubHacks2017")
@@ -8,6 +11,29 @@ cur = db.cursor()
 
 app = Flask(__name__)
 api = Api(app)
+sio = socketio.Server()
+
+
+@app.route('/')
+def index():
+    """Serve the client-side application."""
+    return render_template('index.html')
+
+
+@sio.on('connect', namespace='/chat')
+def connect(sid, environ):
+    print("connect ", sid)
+
+
+@sio.on('chat message', namespace='/chat')
+def message(sid, data):
+    print("message ", data)
+    sio.emit('reply', room=sid)
+
+
+@sio.on('disconnect', namespace='/chat')
+def disconnect(sid):
+    print('disconnect ', sid)
 
 
 class login(Resource):
@@ -47,4 +73,8 @@ api.add_resource(login, '/login')
 api.add_resource(signup, '/signup')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    # wrap Flask application with engineio's middleware
+    app = socketio.Middleware(sio, app)
+
+    # deploy as an eventlet WSGI server
+    eventlet.wsgi.server(eventlet.listen(('', 8000)), app)
