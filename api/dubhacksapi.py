@@ -37,12 +37,20 @@ def background_thread():
     while True:
         socketio.sleep(1)
         print("in background_thread", LFP)
-        if len(LFP) >= 2:
-            pair = random.sample(LFP, 2)
-            LFP = LFP - set(pair)
+        mock = find_match()
+        if mock:
             x = str(random.randint(1, 10**7))
-            socketio.emit('joinroom', {'room': x, 'user1': pair[0], 'user2': pair[1]}, namespace='/chat')
+            socketio.emit('joinroom', {'room': x, 'user1': mock[0], 'user2': mock[1], 'common': mock[2]}, namespace='/chat')
             print("emitted")
+
+
+def find_match():
+    global LFP
+    if len(LFP) < 2:
+        return False
+    pair = random.sample(LFP, 2)
+    LFP = LFP - set(pair)
+    return (pair[0], pair[1], "You have this shit in common")
 
 
 class LoginForm(Form):
@@ -72,11 +80,11 @@ def actuallyjoinroom(message):
     A status message is broadcast to all people in the room."""
     print("in actuallyjoinroom")
     room = message['room']
-    leave_room(message['username'])
-    join_room(room)
-    print(room, message['username'])
+    # # leave_room(message['username'])
+    # # join_room(room)
+    # print(room, message['username'])
     sleep(1)
-    emit('status', {'msg': message['username'] + ' has entered the room.'}, room=room)
+    emit('status', {'msg': message['username'] + ' has entered the room.', 'room': room, 'username': message['username']})
 
 
 @socketio.on('text', namespace='/chat')
