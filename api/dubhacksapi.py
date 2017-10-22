@@ -73,9 +73,10 @@ def actuallyjoinroom(message):
     A status message is broadcast to all people in the room."""
     print("in actuallyjoinroom")
     room = message['room']
-    leave_room(session.get('username'))
+    leave_room(message['username'])
     join_room(room)
-    emit('status', {'msg': session.get('username') + ' has entered the room.'}, room=room)
+    print(room, message['username'])
+    emit('status', {'msg': message['username'] + ' has entered the room.'}, room=room)
 
 
 @socketio.on('joined', namespace='/chat')
