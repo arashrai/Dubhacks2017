@@ -7,6 +7,7 @@ from wtforms.validators import Required
 from flask_cors import CORS
 import random
 import MySQLdb
+from time import sleep
 
 
 main = Blueprint('main', __name__)
@@ -18,8 +19,10 @@ app.debug = True
 app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
 
 db = MySQLdb.connect(host="localhost", user="root",
-                     passwd="root", db="DubHacks2017")
+                     passwd="", db="DubHacks2017")
 cur = db.cursor()
+
+LFP = set()
 
 
 class LoginForm(Form):
@@ -27,6 +30,40 @@ class LoginForm(Form):
     name = StringField('Name', validators=[Required()])
     room = StringField('Room', validators=[Required()])
     submit = SubmitField('Enter Chatroom')
+
+
+@socketio.on('lookingforgroup', namespace='/chat')
+def lookingforgroup(message):
+    """Sent by clients when they enter a room.
+    A status message is broadcast to all people in the room."""
+    print("in looking for group")
+    print(message['username'])
+    global LFP
+    room = message['username']
+    join_room(room)
+    LFP.add(room)
+    while room in LFP:
+        sleep(1)
+        if len(LFP) >= 2:
+            pair = random.sample(LFP, 2)
+            LFP = LFP - set(pair)
+            x = random.randint(1, 10**7)
+            emit('joinroom', {'room': x}, room=pair[0])
+            emit('joinroom', {'room': x}, room=pair[1])
+            break
+
+    # emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
+
+
+@socketio.on('actuallyjoinroom', namespace='/chat')
+def actuallyjoinroom(message):
+    """Sent by clients when they enter a room.
+    A status message is broadcast to all people in the room."""
+    print("in actuallyjoinroom")
+    room = message['room']
+    leave_room(message['name'])
+    join_room(room)
+    emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
 
 
 @socketio.on('joined', namespace='/chat')
@@ -69,15 +106,15 @@ def index():
     return render_template('index.html', form=form)
 
 
-@main.route('/chat')
-def chat():
-    """Chat room. The user's name and room must be stored in
-    the session."""
-    name = session.get('name', '')
-    room = session.get('room', '')
-    if name == '' or room == '':
-        return redirect(url_for('.index'))
-    return render_template('chat.html', name=name, room=room)
+# @main.route('/chat')
+# def chat():
+#     """Chat room. The user's name and room must be stored in
+#     the session."""
+#     name = session.get('name', '')
+#     room = session.get('room', '')
+#     if name == '' or room == '':
+#         return redirect(url_for('.index'))
+#     return render_template('chat.html', name=name, room=room)
 
 
 class randomSEwebsite(Resource):
