@@ -17,8 +17,6 @@ api = Api(app)
 app.debug = True
 app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
 
-# async_mode = None
-
 db = MySQLdb.connect(host="localhost", user="root",
                      passwd="root", db="DubHacks2017")
 cur = db.cursor()
@@ -80,29 +78,6 @@ def chat():
     if name == '' or room == '':
         return redirect(url_for('.index'))
     return render_template('chat.html', name=name, room=room)
-# app = Flask(__name__)
-# CORS(app)
-# api = Api(app)
-# sio = socketio.Server(logger=True, async_mode=async_mode)
-# app.wsgi_app = socketio.Middleware(sio, app.wsgi_app)
-# app.config['SECRET_KEY'] = 'secret!'
-# thread = None
-
-#
-# @sio.on('connect', namespace='/chat')
-# def connect(sid, environ):
-#     print("connect ", sid)
-#
-#
-# @sio.on('chat message', namespace='/chat')
-# def message(sid, data):
-#     print("message ", data)
-#     sio.emit('reply', room=sid)
-#
-#
-# @sio.on('disconnect', namespace='/chat')
-# def disconnect(sid):
-#     print('disconnect ', sid)
 
 
 class randomSEwebsite(Resource):
@@ -170,5 +145,4 @@ app.register_blueprint(main)
 socketio.init_app(app)
 
 if __name__ == '__main__':
-    # app.run(host='0.0.0.0', threaded=True)
     socketio.run(app, host='0.0.0.0')
