@@ -8,6 +8,7 @@ from flask_cors import CORS
 import random
 import MySQLdb
 from time import sleep
+from threading import Lock
 
 
 main = Blueprint('main', __name__)
@@ -19,10 +20,27 @@ app.debug = True
 app.config['SECRET_KEY'] = 'gjr39dkjn344_!67#'
 
 db = MySQLdb.connect(host="localhost", user="root",
-                     passwd="root", db="DubHacks2017")
+                     passwd="test", db="DubHacks2017")
 cur = db.cursor()
 
 LFP = set()
+
+thread = None
+thread_lock = Lock()
+
+
+def background_thread():
+    """Example of how to send server generated events to clients."""
+    global LFP
+    while session.get('room') in LFP:
+        sleep(1)
+        if len(LFP) >= 2:
+            pair = random.sample(LFP, 2)
+            LFP = LFP - set(pair)
+            x = random.randint(1, 10**7)
+            emit('joinroom', {'room': x}, room=pair[0])
+            emit('joinroom', {'room': x}, room=pair[1])
+            break
 
 
 class LoginForm(Form):
@@ -37,22 +55,16 @@ def lookingforgroup(message):
     """Sent by clients when they enter a room.
     A status message is broadcast to all people in the room."""
     global LFP
+    global thread
     session['username'] = message['username']
     session['room'] = message['username']
     print("in looking for group", message['username'])
     room = session.get('room')
     join_room(room)
     LFP.add(room)
-    while room in LFP:
-        sleep(1)
-        print("in looking for group loop", message['username'])
-        if len(LFP) >= 2:
-            pair = random.sample(LFP, 2)
-            LFP = LFP - set(pair)
-            x = random.randint(1, 10**7)
-            emit('joinroom', {'room': x}, room=pair[0])
-            emit('joinroom', {'room': x}, room=pair[1])
-            break
+    with thread_lock:
+        if thread is None:
+            thread = socketio.start_background_task(target=background_thread)
 
     # emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
 
