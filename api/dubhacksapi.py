@@ -31,15 +31,14 @@ class signup(Resource):
             print(question, survey[question])
         sql = "INSERT INTO surveys (question_one, question_two) VALUES('%s', '%s')" % \
             (survey["question_one"], survey["question_two"])
-
-        # sql = ("""INSERT INTO surveys (question_one, question_two)
-        #           VALUES (%s, %s)""", [survey["question_one"], survey["question_two"]])
         cur.execute(sql)
+        db.commit()
         cur.execute("""SELECT LAST_INSERT_ID()""")
         data = cur.fetchall()
-        sql = ("""INSERT INTO users (username, password, email, survey_id)
-                  VALUES (%s , %s, %s, %d)""", [content["username"], content["password"], content["email"], int(data[0][0])])
+        sql = "INSERT INTO users (username, password, email, survey_id) VALUES ('%s' ,'%s' ,'%s' , %d)" % \
+            (content["username"], content["password"], content["email"], int(data[0][0]))
         cur.execute(sql)
+        db.commit()
         return True
 
 
