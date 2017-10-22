@@ -92,7 +92,8 @@ def text(message):
     """Sent by a client when the user entered a new message.
     The message is sent to all people in the room."""
     room = message['room']
-    emit('message', {'msg': message['msg'], 'username': message['username'], 'room': room}, room=room)
+    print("getting text", message['username'], room, message['msg'])
+    emit('message', {'msg': message['msg'], 'username': message['username'], 'room': room})
 
 
 @socketio.on('connect', namespace='/chat')
