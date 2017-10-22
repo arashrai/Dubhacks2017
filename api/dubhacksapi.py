@@ -29,10 +29,10 @@ thread = None
 thread_lock = Lock()
 
 
-def background_thread():
+def background_thread(room):
     """Example of how to send server generated events to clients."""
     global LFP
-    while session.get('room') in LFP:
+    while room in LFP:
         sleep(1)
         if len(LFP) >= 2:
             pair = random.sample(LFP, 2)
@@ -64,7 +64,7 @@ def lookingforgroup(message):
     LFP.add(room)
     with thread_lock:
         if thread is None:
-            thread = socketio.start_background_task(target=background_thread)
+            thread = socketio.start_background_task(target=background_thread, room=room)
 
     # emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
 
