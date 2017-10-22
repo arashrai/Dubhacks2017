@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 
 const questions = {
-  question_one: "Where are you from?",
-  question_two: "pebis or vahine?",
-  // q3: "do u laik nazis?"
+  "musician": "What's your favorite band?",
+  "born": "Where were you raised?",
+  "hobbies": "What are some of your hobbies?",
+  "movie": "Favorite Movie?",
+  "job": "What's your day job?",
+  "superhero": "Favorite Superhero?",
+}
+
+const hard_questions = {
+  "military": "Abortion should be legal.",
+  "abortion": "We should spend less on the military.",
+  "climate": "Climate Change is a serious issue.",
+  "trump": "Donald Trump is a great presidents.",
 }
 
 export default class Signup extends Component {
@@ -76,6 +86,29 @@ export default class Signup extends Component {
                   required="required"
                 />
                 <label className="control-label" htmlFor="input">{question}</label><i className="bar"></i>
+              </div>
+            )
+          }, [])
+        })()}
+        <p>And now, here come the hard ones...</p>
+        {(() => {
+          return Object.keys(hard_questions).reduce((a, key) => {
+            const question = hard_questions[key];
+            return a.concat(
+              <div className="form-group" key={key}>
+                <select name="cars" value={this.state.survey[key]} onChange={(e) => this.setState({
+                    survey: {
+                      ...this.state.survey,
+                      [key]: e.target.value
+                    }})
+                  }>
+                  <option value=""></option>
+                  <option value="Strongly Agree">Strongly Agree</option>
+                  <option value="Agree">Agree</option>
+                  <option value="Disagree">Disagree</option>
+                  <option value="Strongly Disagree">Strongly Disagree</option>
+                </select>
+                <label className="control-label" htmlFor="select">{question}</label><i className="bar"></i>
               </div>
             )
           }, [])
