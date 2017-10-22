@@ -18,7 +18,7 @@ class login(Resource):
         print(data)
         if not data:
             return False
-        elif data[0] == content["password"]:
+        elif data[0][0] == content["password"]:
             return True
         return False
 
