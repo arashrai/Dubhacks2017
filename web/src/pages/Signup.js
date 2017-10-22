@@ -10,10 +10,10 @@ const questions = {
 }
 
 const hard_questions = {
-  "military": "Abortion should be legal.",
-  "abortion": "We should spend less on the military.",
+  "abortion": "Abortion should be legal.",
+  "military": "We should spend less on the military.",
   "climate": "Climate Change is a serious issue.",
-  "trump": "Donald Trump is a great presidents.",
+  "trump": "Donald Trump is a great president.",
 }
 
 export default class Signup extends Component {
