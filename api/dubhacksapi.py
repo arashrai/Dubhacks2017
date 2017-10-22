@@ -34,6 +34,7 @@ def background_thread(room):
     global LFP
     while room in LFP:
         sleep(1)
+        print("in background_thread", room)
         if len(LFP) >= 2:
             pair = random.sample(LFP, 2)
             LFP = LFP - set(pair)
@@ -65,6 +66,7 @@ def lookingforgroup(message):
     with thread_lock:
         if thread is None:
             thread = socketio.start_background_task(target=background_thread, room=room)
+    emit('my_response', {'data': 'Connected', 'count': 0})
 
     # emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
 
