@@ -41,8 +41,7 @@ def background_thread():
             pair = random.sample(LFP, 2)
             LFP = LFP - set(pair)
             x = str(random.randint(1, 10**7))
-            # socketio.emit('joinroom', {'room': x}, namespace='/chat')
-            socketio.emit('joinroom', {'room': x}, namespace='/chat')
+            socketio.emit('joinroom', {'room': x, 'user1': pair[0], 'user2': pair[1]}, namespace='/chat')
             print("emitted")
 
 
@@ -77,15 +76,6 @@ def actuallyjoinroom(message):
     join_room(room)
     print(room, message['username'])
     emit('status', {'msg': message['username'] + ' has entered the room.'}, room=room)
-
-
-# @socketio.on('joined', namespace='/chat')
-# def joined(message):
-#     """Sent by clients when they enter a room.
-#     A status message is broadcast to all people in the room."""
-#     room =
-#     join_room(room)
-#     emit('status', {'msg': session.get('username') + ' has entered the room.'}, room=room)
 
 
 @socketio.on('text', namespace='/chat')
