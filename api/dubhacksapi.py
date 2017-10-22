@@ -117,7 +117,7 @@ def text(message):
 #     return render_template('index.html', form=form)
 
 
-@socketio.on('connect', namespace='/test')
+@socketio.on('connect', namespace='/chat')
 def chat():
     print("in connect")
     global thread
