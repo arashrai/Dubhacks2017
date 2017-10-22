@@ -45,6 +45,7 @@ def lookingforgroup(message):
     LFP.add(room)
     while room in LFP:
         sleep(1)
+        print("in looking for group loop", message['username'])
         if len(LFP) >= 2:
             pair = random.sample(LFP, 2)
             LFP = LFP - set(pair)
