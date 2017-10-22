@@ -29,8 +29,11 @@ class signup(Resource):
         survey = content["survey"]
         for question in survey:
             print(question, survey[question])
-        sql = ("""INSERT INTO surveys (question_one, question_two)
-                  VALUES (%s , %s)""", [survey["question_one"], survey["question_two"]])
+        sql = "INSERT INTO surveys (question_one, question_two) VALUES('%s', '%s')" % \
+            (survey["question_one"], survey["question_two"])
+
+        # sql = ("""INSERT INTO surveys (question_one, question_two)
+        #           VALUES (%s, %s)""", [survey["question_one"], survey["question_two"]])
         cur.execute(sql)
         cur.execute("""SELECT LAST_INSERT_ID()""")
         data = cur.fetchall()
