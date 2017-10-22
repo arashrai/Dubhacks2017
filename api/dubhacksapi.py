@@ -40,7 +40,7 @@ def background_thread():
         mock = find_match()
         if mock:
             x = str(random.randint(1, 10**7))
-            socketio.emit('joinroom', {'room': x, 'user1': mock[0], 'user2': mock[1], 'common': mock[2]}, namespace='/chat')
+            socketio.emit('joinroom', {'room': x, 'user1': mock[0], 'user2': mock[1], 'common': mock[2], 'controversy': mock[3]}, namespace='/chat')
             print("emitted")
 
 
@@ -50,7 +50,7 @@ def find_match():
         return False
     pair = random.sample(LFP, 2)
     LFP = LFP - set(pair)
-    return (pair[0], pair[1], "You have this shit in common")
+    return (pair[0], pair[1], "in common", "controvery")
 
 
 class LoginForm(Form):
@@ -72,6 +72,18 @@ def lookingforgroup(message):
     LFP.add(message['username'])
 
     # emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
+
+
+@socketio.on('revealcontroversy', namespace='/chat')
+def revealcontroversy(message):
+    """Sent by clients when they enter a room.
+    A status message is broadcast to all people in the room."""
+    # session['username'] = message['username']
+    # session['room'] = message['username']
+    print("in looking for group", message['username'])
+    # room = session.get('room')
+    room = message['room']
+    emit('decrementshow', {'room': room, 'username': message['username']}, room=room)
 
 
 @socketio.on('actuallyjoinroom', namespace='/chat')
