@@ -39,6 +39,13 @@ mapScore = {
     'Strongly Disagree': 5
 }
 
+mapContro = {
+    12: " how much we should spend on the military.",
+    13: " whether or not abortion should be legal.",
+    14: " whether or not Trump is doing a good job as the president.",
+    15: " the severity of climate change."
+}
+
 
 def background_thread():
     """Example of how to send server generated events to clients."""
@@ -96,7 +103,7 @@ def calculate_score(a, b):
         diff = abs(mapScore[data1[0][x]] - mapScore[data2[0][x]])
         score += diff
         if diff > 2:
-            contro.append((diff, data1[0], data2[0], x))
+            contro.append((diff, x))
 
     commonString = "You have "
 
@@ -104,14 +111,13 @@ def calculate_score(a, b):
         commonString += x
         commonString += ", "
 
-    commonString += " and probably much more!"
+    commonString += " and probably much more in common!"
 
     contro.sort()
     c = contro[-1]
 
-    controString = a
-    controString += "something "
-    controString += " "
+    controString = "You both really disagree on "
+    controString += mapContro[c[1]]
 
     print(commonString)
     print(controString)
