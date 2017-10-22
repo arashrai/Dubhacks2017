@@ -9,6 +9,7 @@ import random
 import MySQLdb
 from time import sleep
 from threading import Lock
+from itertools import combinations
 
 
 async_mode = None
@@ -30,12 +31,20 @@ cur = db.cursor()
 
 LFP = set()
 
+mapScore = {
+    'Strongly Agree': 1,
+    'Agree': 2,
+    'Neutral': 3,
+    'Disagree': 4,
+    'Strongly Disagree': 5
+}
+
 
 def background_thread():
     """Example of how to send server generated events to clients."""
     global LFP
     while True:
-        socketio.sleep(1)
+        socketio.sleep(3)
         print("in background_thread", LFP)
         mock = find_match()
         if mock:
@@ -48,9 +57,33 @@ def find_match():
     global LFP
     if len(LFP) < 2:
         return False
+    possibilities = list(combinations(LFP, 2))
+
+    scores = []
+
+    for pair in possibilities:
+        n = calculate_score(pair[0], pair[1])
+        scores.append(n, pair[0], pair[1])
+
+#     SELECT * FROM users JOIN surveys ON users.survey_id = surveys.id
+# WHERE users.username = 'testuser';
     pair = random.sample(LFP, 2)
     LFP = LFP - set(pair)
     return (pair[0], pair[1], "in common", "controvery")
+
+
+def calculate_score(a, b):
+    sql = """
+            SELECT * FROM users JOIN surveys ON users.survey_id = surveys.id
+            WHERE users.username = %s
+          """
+    cur.execute(sql, [a])
+    data1 = cur.fetchall()
+    cur.execute(sql, [b])
+    data2 = cur.fetchall()
+    for x in data1:
+        print(x, data1[x])
+    return (3, a, b, "in common", "controvery")
 
 
 class LoginForm(Form):
