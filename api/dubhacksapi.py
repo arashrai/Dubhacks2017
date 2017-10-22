@@ -41,8 +41,8 @@ def background_thread():
             pair = random.sample(LFP, 2)
             LFP = LFP - set(pair)
             x = random.randint(1, 10**7)
-            emit('joinroom', {'room': x}, room=pair[0])
-            emit('joinroom', {'room': x}, room=pair[1])
+            socketio.emit('joinroom', {'room': x}, room=pair[0])
+            socketio.emit('joinroom', {'room': x}, room=pair[1])
 
 
 class LoginForm(Form):
