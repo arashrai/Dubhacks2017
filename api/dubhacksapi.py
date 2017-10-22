@@ -13,7 +13,7 @@ api = Api(app)
 class login(Resource):
     def post(self):
         content = request.get_json()
-        cur.execute("""SELECT password FROM breakfast
+        cur.execute("""SELECT password FROM users
                        WHERE username = %s""", (content["username"],))
         data = cur.fetchall()
         if not data:
