@@ -75,7 +75,7 @@ def actuallyjoinroom(message):
     room = message['room']
     leave_room(session.get('username'))
     join_room(room)
-    emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
+    emit('status', {'msg': session.get('username') + ' has entered the room.'}, room=room)
 
 
 @socketio.on('joined', namespace='/chat')
