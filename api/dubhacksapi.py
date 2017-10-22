@@ -22,7 +22,7 @@ socketio = SocketIO(app, async_mode=async_mode)
 thread = None
 thread_lock = Lock()
 
-main = Blueprint('main', __name__)
+# main = Blueprint('main', __name__)
 
 db = MySQLdb.connect(host="localhost", user="root",
                      passwd="root", db="DubHacks2017")
@@ -56,17 +56,12 @@ class LoginForm(Form):
 def lookingforgroup(message):
     """Sent by clients when they enter a room.
     A status message is broadcast to all people in the room."""
-    global LFP
-    global thread
     session['username'] = message['username']
     session['room'] = message['username']
     print("in looking for group", message['username'])
     room = session.get('room')
     join_room(room)
     LFP.add(room)
-    with thread_lock:
-        if thread is None:
-            thread = socketio.start_background_task(target=background_thread)
 
     # emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
 
@@ -122,15 +117,14 @@ def text(message):
 #     return render_template('index.html', form=form)
 
 
-# @main.route('/chat')
-# def chat():
-#     """Chat room. The user's name and room must be stored in
-#     the session."""
-#     name = session.get('name', '')
-#     room = session.get('room', '')
-#     if name == '' or room == '':
-#         return redirect(url_for('.index'))
-#     return render_template('chat.html', name=name, room=room)
+@socketio.on('connect', namespace='/test')
+def chat():
+    print("in connect")
+    global thread
+    with thread_lock:
+        if thread is None:
+            thread = socketio.start_background_task(target=background_thread)
+    emit('my_response', {'data': 'Connected', 'count': 0})
 
 
 class randomSEwebsite(Resource):
@@ -194,8 +188,6 @@ api.add_resource(login, '/login')
 api.add_resource(signup, '/signup')
 api.add_resource(randomSEwebsite, '/randomSEwebsite')
 
-app.register_blueprint(main)
-socketio.init_app(app)
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0')
