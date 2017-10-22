@@ -41,7 +41,7 @@ def background_thread():
             pair = random.sample(LFP, 2)
             LFP = LFP - set(pair)
             x = str(random.randint(1, 10**7))
-            socketio.emit('joinroom', {'room': x}, namespace='/chat')
+            # socketio.emit('joinroom', {'room': x}, namespace='/chat')
             socketio.emit('joinroom', {'room': x}, namespace='/chat')
             print("emitted")
 
