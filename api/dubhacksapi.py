@@ -87,29 +87,6 @@ def text(message):
     emit('message', {'msg': message['msg'], 'username': message['username'], 'room': room}, room=room)
 
 
-# @socketio.on('left', namespace='/chat')
-# def left(message):
-#     """Sent by clients when they leave a room.
-#     A status message is broadcast to all people in the room."""
-#     room = session.get('room')
-#     leave_room(room)
-#     emit('status', {'msg': session.get('name') + ' has left the room.'}, room=room)
-
-
-# @main.route('/', methods=['GET', 'POST'])
-# def index():
-#     """Login form to enter a room."""
-#     form = LoginForm()
-#     if form.validate_on_submit():
-#         session['name'] = form.name.data
-#         session['room'] = form.room.data
-#         return redirect(url_for('.chat'))
-#     elif request.method == 'GET':
-#         form.name.data = session.get('name', '')
-#         form.room.data = session.get('room', '')
-#     return render_template('index.html', form=form)
-
-
 @socketio.on('connect', namespace='/chat')
 def chat():
     print("in connect")
@@ -161,8 +138,9 @@ class signup(Resource):
     def post(self):
         content = request.get_json()
         survey = content["survey"]
-        sql = "INSERT INTO surveys (question_one, question_two) VALUES('%s', '%s')" % \
-            (survey["question_one"], survey["question_two"])
+        sql = "INSERT INTO surveys (musician, born, hobbies, movie, job, superhero, climate, military, abortion, trump) \
+            VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')" % \
+            (survey["musician"], survey["born"], survey["hobbies"], survey["movie"], survey["job"], survey["superhero"], survey["climate"], survey["military"], survey["abortion"], survey["trump"])
         cur.execute(sql)
         db.commit()
         cur.execute("""SELECT LAST_INSERT_ID()""")
