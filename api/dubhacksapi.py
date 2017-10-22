@@ -8,7 +8,7 @@ import socketio
 async_mode = None
 
 db = MySQLdb.connect(host="localhost", user="root",
-                     passwd="", db="DubHacks2017")
+                     passwd="root", db="DubHacks2017")
 cur = db.cursor()
 
 app = Flask(__name__)
