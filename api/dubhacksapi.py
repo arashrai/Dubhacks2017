@@ -38,9 +38,9 @@ def lookingforgroup(message):
     A status message is broadcast to all people in the room."""
     global LFP
     session['username'] = message['username']
-    session['room'] = message['room']
+    session['room'] = message['username']
     print("in looking for group", message['username'])
-    room = message['username']
+    room = session.get('room')
     join_room(room)
     LFP.add(room)
     while room in LFP:
