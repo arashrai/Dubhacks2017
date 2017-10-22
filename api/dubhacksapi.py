@@ -82,7 +82,7 @@ def calculate_score(a, b):
     cur.execute(sql, [b])
     data2 = cur.fetchall()
     for x in data1:
-        print(x, data1[x])
+        print(x)
     return (3, a, b, "in common", "controvery")
 
 
