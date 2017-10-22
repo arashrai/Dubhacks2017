@@ -5,6 +5,7 @@ export default class Landing extends Component {
     return (
       <div className="p-page p-login">
         <div onClick={() => this.props.gotoPage("Main")} className="btn btn-login">SKIP TO MAIN</div>
+        <div onClick={() => this.props.gotoPage("Chat")} className="btn btn-login">SKIP TO CHAT</div>
         <h1>AcrossTheAisle</h1>
         <div className="t-subtitle">Humanizing one another, one conversation at a time</div>
         <hr/>

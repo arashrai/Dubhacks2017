@@ -4,10 +4,107 @@
     margin: auto;
     background-color: #FAFAFA;
     padding: 24px;
+    border-radius: 4px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
 }
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat|Open+Sans');
+
+html {
+    background-color: #2196F3;
+
+}
+
+.le-grande-reveal {
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    transition: 150ms;
+    background-color: #FF9800;
+    right: 24px;
+    bottom: 24px;
+    border-radius: 6px;
+    box-shadow: inset 0 0px 2px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    user-select: none;
+}
+
+.le-grande-reveal:hover {
+    background-color: #FB8C00;
+}
+
+.le-grande-reveal:active {
+    box-shadow: inset 0 0px 20px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+}
+
+
+.p-chat textarea:focus {
+    outline: none;
+}
+
+
+.chat-window {
+    position: relative;
+    height: calc(100% - 148px);
+    overflow-y: scroll;
+}
+
+.p-page.p-chat {
+    height: 100%;
+    max-width: 600px;
+}
+
+.p-chat textarea {
+position: absolute;
+    bottom: 24px;
+    width: calc(100% - 120px);
+    height: 60px;
+    padding: 12px;
+    resize: none;
+        background-color: inherit;
+    border: 1px solid #c1c1c1;
+    border-radius: 6px;
+}
+
+
+
+.find-chat:hover {
+    box-shadow: 0px 5px 7px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+    background-color: #f3faff;
+}
+.find-chat {
+    width: 150px;
+    height: 150px;
+    transition: 200ms;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background-color: #ffffff;
+    padding: 24px;
+    text-align: center;
+    border-radius: 100%;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.24);
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.p-page.p-main {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    padding: 24px;
+    background-color: transparent;
+    box-shadow: 0px 0px 0 transparent;
+}
 
 * {
     font-family: 'Open Sans', sans-serif;
@@ -39,7 +136,6 @@ div#root {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #2196F3;
     padding:24px;
 }
 
@@ -122,11 +218,6 @@ textarea::before,
 body *::after,
 body *::before {
   box-sizing: border-box;
-}
-
-body {
-  background-image: -webkit-linear-gradient(top, #f2f2f2, #e6e6e6);
-  background-image: linear-gradient(top, #f2f2f2, #e6e6e6);
 }
 
 

@@ -7,7 +7,9 @@ export default class Login extends Component {
     error: false,
   }
 
-  doLogin = () => {
+  plslogin = () => {
+    this.props.updateUserDeets({username: this.state.username, password: this.state.password})
+
     var data = JSON.stringify({
       "username": this.state.username,
       "password": this.state.password,
@@ -54,7 +56,7 @@ export default class Login extends Component {
             fontSize: "14px",
           }}>Uh oh, looks like your login details were wrong :(</div>
         }
-        <div onClick={this.doLogin} className="btn btn-login">Login</div>
+        <div onClick={this.plslogin} className="btn btn-login">Login</div>
       </div>
     );
   }
