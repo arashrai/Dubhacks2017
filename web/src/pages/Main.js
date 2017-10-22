@@ -7,18 +7,6 @@ export default class Main extends Component {
     text: "Let's talk!"
   }
 
-  findChat = async () => {
-    console.log("do thing")
-
-    await sleep(500);
-    this.setState({text: "Found someone!"})
-    await sleep(2000);
-
-    this.props.gotoPage("Chat")
-
-    console.log("goto chat")
-  }
-
   startLoading = async () => {
     this.setState({text: "Connecting."})
     await sleep(300);
@@ -28,25 +16,39 @@ export default class Main extends Component {
     await sleep(300);
     this.setState({text: "Connecting."})
     await sleep(300);
-    this.setState({text: "Matching."})
-    await sleep(300);
-    this.setState({text: "Matching.."})
-    await sleep(300);
-    this.setState({text: "Matching..."})
-    await sleep(300);
-    this.setState({text: "Matching."})
-    await sleep(300);
-    this.setState({text: "Matching.."})
-    await sleep(300);
-    this.setState({text: "Matching..."})
-    await sleep(300);
-    this.setState({text: "Matching."})
-    await sleep(300);
-    this.setState({text: "Matching.."})
-    await sleep(300);
-    this.setState({text: "Matching..."})
 
-    this.findChat()
+    window.socket = window.io.connect('http://arashrai.com:5000/chat');
+
+    window.socket.on('connect', () => {
+      console.log("on connect")
+      window.socket.emit('lookingforgroup', {username: this.props.hoodis.username});
+    });
+
+    window.socket.on('joinroom', (data) => {
+      console.log("on joinroom", data);
+      window.OTHERBRAH = data.user1 === this.props.hoodis.username ? data.user2 : data.user1;
+      window.ROOM = data.room; // wiring state is harddddd
+      window.socket.emit('actuallyjoinroom', {username: this.props.hoodis.username, room: data.room});
+    });
+
+    // i want to die
+    var doit = true;
+    window.socket.on('joinroom', () => {
+      console.log("on joinroom - doit")
+      doit = false;
+    })
+    while (doit) {
+      this.setState({text: "Matching."})
+      await sleep(300);
+      this.setState({text: "Matching.."})
+      await sleep(300);
+      this.setState({text: "Matching..."})
+      await sleep(300);
+    }
+
+    this.setState({text: "Found someone!"})
+      this.props.gotoPage("Chat")
+    await sleep(2000);
   }
 
   render() {

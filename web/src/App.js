@@ -14,8 +14,8 @@ class App extends Component {
   state = {
     curr_page: "Landing",
     user: {
-      name: "testuser",
-      pass: "test"
+      username: "testuser",
+      password: "test"
     }
   }
 
@@ -39,7 +39,7 @@ class App extends Component {
   render() {
     const Page = page_map[this.state.curr_page];
     // yolo just give every page every function ezpz
-    return <Page updateUserDeets={this.updateUserDeets} gotoPage={this.gotoPage} />;
+    return <Page hoodis={this.state.user} updateUserDeets={this.updateUserDeets} gotoPage={this.gotoPage} />;
   }
 }
 
