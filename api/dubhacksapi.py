@@ -1,17 +1,23 @@
-from flask import Flask, request
+from flask import Flask, redirect, request
 from flask_restful import Resource, Api
 from flask_cors import CORS
+import random
 import MySQLdb
 import socketio
 
+async_mode = None
+
 db = MySQLdb.connect(host="localhost", user="root",
-                     passwd="root", db="DubHacks2017")
+                     passwd="", db="DubHacks2017")
 cur = db.cursor()
 
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
-sio = socketio.Server()
+sio = socketio.Server(logger=True, async_mode=async_mode)
+app.wsgi_app = socketio.Middleware(sio, app.wsgi_app)
+app.config['SECRET_KEY'] = 'secret!'
+thread = None
 
 
 @sio.on('connect', namespace='/chat')
@@ -28,6 +34,30 @@ def message(sid, data):
 @sio.on('disconnect', namespace='/chat')
 def disconnect(sid):
     print('disconnect ', sid)
+
+
+class randomSEwebsite(Resource):
+    def get(self):
+        websites = {
+            "Arash": "http://arashrai.com",
+            "Stephen": "https://melinysh.me",
+            "James": "http://jameshageman.com",
+            "Matt": "http://mattdsouza.com",
+            "Holly": "http://hollyoegema.com",
+            "George": "http://georgeutsin.com/",
+            "Spencer": "http://spencerdobrik.com/",
+            "Liam": "http://liamca.xyz/",
+            "Ryan": "http://www.ryan-martin.ca/",
+            "Denton": "http://dentonliu.com/",
+            "Stanley": "http://stanhuan.com/",
+            "Prilik": "http://prilik.com/",
+            "Kevin": "http://kpeng.ca/",
+            "Tyler": "http://tnychka.me",
+        }
+        omit = request.args.get('omit')  # e.g. http://arashrai.com:5000/randomSEwebsite?omit=Arash will omit my website
+        websites.pop(omit, None)  # passing None masks KeyErrors
+        lucker_dog = random.choice(list(websites.values()))
+        return redirect(lucker_dog, code=302)
 
 
 class login(Resource):
@@ -65,6 +95,8 @@ class signup(Resource):
 
 api.add_resource(login, '/login')
 api.add_resource(signup, '/signup')
+api.add_resource(randomSEwebsite, '/randomSEwebsite')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
