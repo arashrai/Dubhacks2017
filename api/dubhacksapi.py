@@ -40,7 +40,7 @@ def background_thread():
         if len(LFP) >= 2:
             pair = random.sample(LFP, 2)
             LFP = LFP - set(pair)
-            x = random.randint(1, 10**7)
+            x = str(random.randint(1, 10**7))
             socketio.emit('joinroom', {'room': x}, namespace='/chat')
             socketio.emit('joinroom', {'room': x}, namespace='/chat')
             print("emitted")
@@ -57,12 +57,12 @@ class LoginForm(Form):
 def lookingforgroup(message):
     """Sent by clients when they enter a room.
     A status message is broadcast to all people in the room."""
-    session['username'] = message['username']
-    session['room'] = message['username']
+    # session['username'] = message['username']
+    # session['room'] = message['username']
     print("in looking for group", message['username'])
-    room = session.get('room')
-    join_room(room)
-    LFP.add(room)
+    # room = session.get('room')
+    # join_room(room)
+    LFP.add(message['username'])
 
     # emit('status', {'msg': session.get('name') + ' has entered the room.'}, room=room)
 
@@ -79,20 +79,20 @@ def actuallyjoinroom(message):
     emit('status', {'msg': message['username'] + ' has entered the room.'}, room=room)
 
 
-@socketio.on('joined', namespace='/chat')
-def joined(message):
-    """Sent by clients when they enter a room.
-    A status message is broadcast to all people in the room."""
-    room = session.get('room')
-    join_room(room)
-    emit('status', {'msg': session.get('username') + ' has entered the room.'}, room=room)
+# @socketio.on('joined', namespace='/chat')
+# def joined(message):
+#     """Sent by clients when they enter a room.
+#     A status message is broadcast to all people in the room."""
+#     room =
+#     join_room(room)
+#     emit('status', {'msg': session.get('username') + ' has entered the room.'}, room=room)
 
 
 @socketio.on('text', namespace='/chat')
 def text(message):
     """Sent by a client when the user entered a new message.
     The message is sent to all people in the room."""
-    room = session.get('room')
+    room = message['room']
     emit('message', {'msg': message['msg'], 'username': message['username']}, room=room)
 
 
