@@ -63,7 +63,7 @@ def find_match():
 
     for pair in possibilities:
         n = calculate_score(pair[0], pair[1])
-        scores.append(n, pair[0], pair[1])
+        scores.append(n)
 
 #     SELECT * FROM users JOIN surveys ON users.survey_id = surveys.id
 # WHERE users.username = 'testuser';
