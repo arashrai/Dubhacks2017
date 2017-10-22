@@ -35,7 +35,7 @@ def background_thread():
     """Example of how to send server generated events to clients."""
     global LFP
     while True:
-        sleep(1)
+        socketio.sleep(1)
         print("in background_thread", LFP)
         if len(LFP) >= 2:
             pair = random.sample(LFP, 2)
