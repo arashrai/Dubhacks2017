@@ -26,8 +26,16 @@ class login(Resource):
 class signup(Resource):
     def post(self):
         content = request.get_json()
-        print(content)
-        return content["signup"]
+        survey = content["survey"]
+        sql = ("""INSERT INTO surveys (question_one, question_two)
+                  VALUES (%s , %s)""", (survey["question_one"], survey["question_two"],))
+        cur.execute(sql)
+        cur.execute("""SELECT LAST_INSERT_ID()""")
+        data = cur.fetchall()
+        sql = ("""INSERT INTO users (username, password, email, survey_id)
+                  VALUES (%s , %s, %s, %d)""", (content["username"], content["password"], content["email"], int(data[0][0]),))
+        cur.execute(sql)
+        return True
 
 
 api.add_resource(login, '/login')
