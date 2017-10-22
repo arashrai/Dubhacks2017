@@ -26,9 +26,13 @@ export default class Main extends Component {
     });
 
     window.socket.on('joinroom', (data) => {
+
       console.log("on joinroom", data);
       window.OTHERBRAH = data.user1 === this.props.hoodis.username ? data.user2 : data.user1;
       if(window.ROOM === null){
+      window.FUCKINGGLOBALSREEEEEEEE = data.common;
+        window.CONTRA = data.controversy;
+        window.SHOW_CONTRA = 2;
         window.ROOM = data.room;
       } // wiring state is harddddd
       window.socket.emit('actuallyjoinroom', {username: this.props.hoodis.username, room: data.room});
