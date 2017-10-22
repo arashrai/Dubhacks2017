@@ -18,6 +18,7 @@ export default class Chat extends Component {
             {prefix: "",color:"green",msg:window.FUCKINGGLOBALSREEEEEEEE}
           ]
         })
+      document.querySelector(".chat-window").scrollTop = document.querySelector(".chat-window").scrollHeight;
     });
 
     window.socket.on('message', (data) => {
@@ -30,6 +31,7 @@ export default class Chat extends Component {
 
           ]
         })
+      document.querySelector(".chat-window").scrollTop = document.querySelector(".chat-window").scrollHeight;
     });
 
     window.socket.on("decrementshow", (data) => {
@@ -45,6 +47,7 @@ export default class Chat extends Component {
         })
         }
       }
+      document.querySelector(".chat-window").scrollTop = document.querySelector(".chat-window").scrollHeight;
     })
   }
 
@@ -75,7 +78,7 @@ export default class Chat extends Component {
         <div className="chat-window">
           {this.state.chat.map(({color, msg, prefix}) => {
             return (
-              <div key={msg + prefix + color} style={{color: color}}>{prefix} {msg}</div>
+              <div key={msg + prefix + color + Math.random()} style={{color: color}}>{prefix} {msg}</div>
             );
           })}
         </div>

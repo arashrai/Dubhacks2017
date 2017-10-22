@@ -3,70 +3,7 @@ import React, { Component } from 'react';
 export default class Landing extends Component {
   render() {
     return (
-      <div className="p-page p-login">
-        <div
-          onClick={async () => {
-            this.props.updateUserDeets({ username: "testuser", password:"test" })
-            var data = JSON.stringify(this.props.hoodis);
-
-            var xhr = new XMLHttpRequest();
-
-            const self = this;
-
-            xhr.open("POST", "http://arashrai.com:5000/login");
-            xhr.setRequestHeader("content-type", "application/json");
-            xhr.setRequestHeader("cache-control", "no-cache");
-
-            xhr.send(data);
-
-            return new Promise(res => {
-              xhr.addEventListener("readystatechange", function () {
-                if (this.readyState === 4) {
-                  if (this.responseText.trim() === "true") {
-                    self.props.gotoPage("Main");
-                    res();
-                  } else {
-                    self.setState({error: true})
-                  }
-                }
-              });
-            })
-          }}
-          className="btn btn-login">
-          SKIP TO MAIN
-        </div>
-        <div
-          onClick={async () => {
-            this.props.updateUserDeets({ username: "testuser2", password:"test" })
-            var data = JSON.stringify(this.props.hoodis);
-
-            var xhr = new XMLHttpRequest();
-
-            const self = this;
-
-            xhr.open("POST", "http://arashrai.com:5000/login");
-            xhr.setRequestHeader("content-type", "application/json");
-            xhr.setRequestHeader("cache-control", "no-cache");
-
-            xhr.send(data);
-
-            return new Promise(res => {
-              xhr.addEventListener("readystatechange", function () {
-                if (this.readyState === 4) {
-                  if (this.responseText.trim() === "true") {
-                    self.props.gotoPage("Main");
-                    res();
-                  } else {
-                    self.setState({error: true})
-                  }
-                }
-              });
-            })
-          }}
-          className="btn btn-login">
-
-          SKIP TO MAIN 2
-        </div>
+      <div className="p-page p-landing">
         <h1>AcrossTheAisle</h1>
         <div className="t-subtitle">Humanizing one another, one conversation at a time</div>
         <hr/>
