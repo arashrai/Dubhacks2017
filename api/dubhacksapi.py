@@ -75,7 +75,7 @@ def actuallyjoinroom(message):
     leave_room(message['username'])
     join_room(room)
     print(room, message['username'])
-    sleep(2)
+    sleep(5)
     emit('status', {'msg': message['username'] + ' has entered the room.'}, room=room)
 
 
