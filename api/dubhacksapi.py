@@ -27,8 +27,6 @@ class signup(Resource):
     def post(self):
         content = request.get_json()
         survey = content["survey"]
-        for question in survey:
-            print(question, survey[question])
         sql = "INSERT INTO surveys (question_one, question_two) VALUES('%s', '%s')" % \
             (survey["question_one"], survey["question_two"])
         cur.execute(sql)
@@ -37,7 +35,10 @@ class signup(Resource):
         data = cur.fetchall()
         sql = "INSERT INTO users (username, password, email, survey_id) VALUES ('%s' ,'%s' ,'%s' , %d)" % \
             (content["username"], content["password"], content["email"], int(data[0][0]))
-        cur.execute(sql)
+        try:
+            cur.execute(sql)
+        except:
+            return False
         db.commit()
         return True
 
