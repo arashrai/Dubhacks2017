@@ -81,10 +81,10 @@ def actuallyjoinroom(message):
     print("in actuallyjoinroom")
     room = message['room']
     # # leave_room(message['username'])
-    # # join_room(room)
+    join_room(room)
     # print(room, message['username'])
     sleep(1)
-    emit('status', {'msg': message['username'] + ' has entered the room.', 'room': room, 'username': message['username']})
+    emit('status', {'msg': message['username'] + ' has entered the room.', 'room': room, 'username': message['username']}, room=room)
 
 
 @socketio.on('text', namespace='/chat')
@@ -93,7 +93,7 @@ def text(message):
     The message is sent to all people in the room."""
     room = message['room']
     print("getting text", message['username'], room, message['msg'])
-    emit('message', {'msg': message['msg'], 'username': message['username'], 'room': room})
+    emit('message', {'msg': message['msg'], 'username': message['username'], 'room': room}, room=room)
 
 
 @socketio.on('connect', namespace='/chat')
